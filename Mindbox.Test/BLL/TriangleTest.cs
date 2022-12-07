@@ -56,21 +56,53 @@ namespace Mindbox.Test.BLL
         }
 
         [Test]
-        public void Ctor_InvalidSideLengths_Exception()
+        public void IsValid_NotRightTriangle_Success()
         {
-            // Arrange
-            var sideLengths = new double[] { -1000, 0, 1000 };
+            // Act
+            var isValidTriangle = notRightTriangle.isValid();
 
             //Assert
-            foreach (var firstSideLength in sideLengths)
-                foreach (var secondSideLength in sideLengths)
-                    foreach (var thirdSideLength in sideLengths)
+            Assert.True(isValidTriangle);
+        }
+
+        [Test]
+        public void IsValid_RightTriangle_Success()
+        {
+            // Act
+            var isValidTriangle = rightTriangle.isValid();
+
+            //Assert
+            Assert.True(isValidTriangle);
+        }
+
+        [Test]
+        public void IsValid_NotPositiveSideLengths_Exception()
+        {
+            // Arrange
+            var sides = new double[] { -1000, 0, 1000 };
+
+            //Assert
+            foreach (var a in sides)
+                foreach (var b in sides)
+                    foreach (var c in sides)
                     {
-                        if (firstSideLength > 0 && secondSideLength > 0 && thirdSideLength > 0)
+                        if (ArePositiveSides(a, b, c))
                             break;
 
-                        Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(firstSideLength, secondSideLength, thirdSideLength));
+                        Assert.False(new Triangle(a, b, c).isValid());
                     }
         }
+
+        [Test]
+        public void IsValid_NotExistTriangle_Exception()
+        {
+            // Arrange
+            IFigure triangle = new Triangle(1, 1, 10);
+
+            //Assert
+            Assert.False(triangle.isValid());
+        }
+
+        private bool ArePositiveSides(double a, double b, double c) => a > 0 && b > 0 && c > 0;
     }
 }

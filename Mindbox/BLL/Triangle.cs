@@ -4,49 +4,54 @@ namespace Mindbox.BLL
 {
     public class Triangle : ITriangle
     {
-        private readonly double _firstSideLength;
-        private readonly double _secondSideLength;
-        private readonly double _thirdSideLength;
+        private readonly double a;
+        private readonly double b;
+        private readonly double c;
 
-        public Triangle(double firstSideLength, double secondSideLength, double thirdSideLength)
+        public Triangle(double a, double b, double c)
         {
-            if (firstSideLength <= 0 || secondSideLength <= 0 || thirdSideLength <= 0)
-                throw new ArgumentOutOfRangeException();
-
-            _firstSideLength = firstSideLength;
-            _secondSideLength = secondSideLength;
-            _thirdSideLength = thirdSideLength;
+            this.a = a;
+            this.b = b;
+            this.c = c;
         }
 
         public bool IsRight()
         {
-            var expectedHypotenuseLength = Max(Max(_firstSideLength, _secondSideLength), _thirdSideLength);
+            var maxSide = Max(Max(a, b), c);
 
-            double actualHypotenuseLength = 0;
+            double hypotenuse = 0;
 
-            if (_firstSideLength == expectedHypotenuseLength)
-                actualHypotenuseLength = GetHypotenuseLength(_secondSideLength, _thirdSideLength);
+            if (a == maxSide)
+                hypotenuse = GetHypotenuse(b, c);
 
-            if (_secondSideLength == expectedHypotenuseLength)
-                actualHypotenuseLength = GetHypotenuseLength(_firstSideLength, _thirdSideLength);
+            if (b == maxSide)
+                hypotenuse = GetHypotenuse(a, c);
 
-            if (_thirdSideLength == expectedHypotenuseLength)
-                actualHypotenuseLength = GetHypotenuseLength(_firstSideLength, _secondSideLength);
+            if (c == maxSide)
+                hypotenuse = GetHypotenuse(a, b);
 
-            return expectedHypotenuseLength == actualHypotenuseLength;
+            return maxSide == hypotenuse;
         }
 
         public double Square()
         {
-            double semiperimeter = GetSemiperimeter(_firstSideLength, _secondSideLength, _thirdSideLength);
-            return GetHeronSquare(_firstSideLength, _secondSideLength, _thirdSideLength, semiperimeter);
+            double semiperimeter = GetSemiperimeter(a, b, c);
+            return GetHeronSquare(a, b, c, semiperimeter);
         }
+
+        public bool isValid()
+        {
+            var areSidesPositive = a > 0 && b > 0 && c > 0;
+            var isTriangleExist = a + b > c && a + c > b && b + c > a;
+            return areSidesPositive && isTriangleExist;
+        }
+
+        private double Max(double a, double b) => a > b ? a : b;
+
+        private double GetHypotenuse(double a, double b) => Math.Sqrt(a * a + b * b);
 
         private double GetSemiperimeter(double a, double b, double c) => (a + b + c) / 2;
 
         private double GetHeronSquare(double a, double b, double c, double p) => Math.Sqrt(p * (p - a) * (p - b) * (p - c));
-
-        private double Max(double a, double b) => a > b ? a : b;
-        private double GetHypotenuseLength(double a, double b) => Math.Sqrt(a * a + b * b);
     }
 }

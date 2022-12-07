@@ -4,18 +4,18 @@ namespace Mindbox.BLL
 {
     public class Circle : IFigure
     {
-        private readonly double _radiusLength;
-        public Circle(double radiusLength)
-        {
-            if (radiusLength <= 0)
-                throw new ArgumentOutOfRangeException();
+        private readonly double r;
 
-            _radiusLength = radiusLength;
+        public Circle(double r)
+        {
+            this.r = r;
         }
 
         public double Square()
         {
-            return Math.PI * _radiusLength * _radiusLength;
+            return Math.PI * r * r;
         }
+
+        public bool isValid() => r > 0;
     }
 }

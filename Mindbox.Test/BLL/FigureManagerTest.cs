@@ -4,6 +4,9 @@ namespace Mindbox.Test.BLL
 {
     public class FigureManagerTest
     {
+        private const double ValidSquare = 10;
+        private const double InvalidSquare = 0;
+
         private IFigureManager figureManager;
         private Mock<IFigure> figure;
 
@@ -15,11 +18,14 @@ namespace Mindbox.Test.BLL
         }
 
         [Test]
-        public void GetSquare_ValidFigureSquare_Success()
+        public void GetSquare_ValidFigure_Success()
         {
             // Arrange
-            double expectedSquare = 10;
+            double expectedSquare = ValidSquare;
+            var isFigureValid = true;
+
             figure.Setup(x => x.Square()).Returns(expectedSquare);
+            figure.Setup(x => x.isValid()).Returns(isFigureValid);
 
             // Act
             var actualSquare = figureManager.GetSquare(figure.Object);
@@ -29,11 +35,28 @@ namespace Mindbox.Test.BLL
         }
 
         [Test]
+        public void GetSquare_InvalidFigure_Exception()
+        {
+            // Arrange
+            double expectedSquare = ValidSquare;
+            var isFigureValid = false;
+
+            figure.Setup(x => x.Square()).Returns(expectedSquare);
+            figure.Setup(x => x.isValid()).Returns(isFigureValid);
+
+            //Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => figureManager.GetSquare(figure.Object));
+        }
+
+        [Test]
         public void GetSquare_InvalidFigureSquare_Exception()
         {
             // Arrange
-            double squareResult = 0;
-            figure.Setup(x => x.Square()).Returns(squareResult);
+            double expectedSquare = InvalidSquare;
+            var isFigureValid = true;
+
+            figure.Setup(x => x.Square()).Returns(expectedSquare);
+            figure.Setup(x => x.isValid()).Returns(isFigureValid);
 
             //Assert
             Assert.Throws<OverflowException>(() => figureManager.GetSquare(figure.Object));

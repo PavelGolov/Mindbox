@@ -9,6 +9,9 @@ namespace Mindbox.BLL
             if (figure is null)
                 throw new ArgumentNullException();
 
+            if (!figure.isValid())
+                throw new ArgumentOutOfRangeException();
+
             var square = figure.Square();
 
             if (square <= 0)
