@@ -7,14 +7,14 @@ namespace Mindbox.Test.BLL
         private const double ValidSquare = 10;
         private const double InvalidSquare = 0;
 
-        private IFigureManager figureManager;
-        private Mock<IFigure> figure;
+        private IFigureManager _figureManager;
+        private Mock<IFigure> _figure;
 
         [SetUp]
         public void Setup()
         {
-            figureManager = new FigureManager();
-            figure = new Mock<IFigure>();
+            _figureManager = new FigureManager();
+            _figure = new Mock<IFigure>();
         }
 
         [Test]
@@ -24,11 +24,11 @@ namespace Mindbox.Test.BLL
             double expectedSquare = ValidSquare;
             var isFigureValid = true;
 
-            figure.Setup(x => x.Square()).Returns(expectedSquare);
-            figure.Setup(x => x.isValid()).Returns(isFigureValid);
+            _figure.Setup(x => x.Square()).Returns(expectedSquare);
+            _figure.Setup(x => x.isValid()).Returns(isFigureValid);
 
             // Act
-            var actualSquare = figureManager.GetSquare(figure.Object);
+            var actualSquare = _figureManager.GetSquare(_figure.Object);
 
             //Assert
             Assert.AreEqual(actualSquare, expectedSquare);
@@ -41,11 +41,11 @@ namespace Mindbox.Test.BLL
             double expectedSquare = ValidSquare;
             var isFigureValid = false;
 
-            figure.Setup(x => x.Square()).Returns(expectedSquare);
-            figure.Setup(x => x.isValid()).Returns(isFigureValid);
+            _figure.Setup(x => x.Square()).Returns(expectedSquare);
+            _figure.Setup(x => x.isValid()).Returns(isFigureValid);
 
             //Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => figureManager.GetSquare(figure.Object));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _figureManager.GetSquare(_figure.Object));
         }
 
         [Test]
@@ -55,11 +55,11 @@ namespace Mindbox.Test.BLL
             double expectedSquare = InvalidSquare;
             var isFigureValid = true;
 
-            figure.Setup(x => x.Square()).Returns(expectedSquare);
-            figure.Setup(x => x.isValid()).Returns(isFigureValid);
+            _figure.Setup(x => x.Square()).Returns(expectedSquare);
+            _figure.Setup(x => x.isValid()).Returns(isFigureValid);
 
             //Assert
-            Assert.Throws<OverflowException>(() => figureManager.GetSquare(figure.Object));
+            Assert.Throws<OverflowException>(() => _figureManager.GetSquare(_figure.Object));
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace Mindbox.Test.BLL
             IFigure figure = null;
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() => figureManager.GetSquare(figure));
+            Assert.Throws<ArgumentNullException>(() => _figureManager.GetSquare(figure));
         }
     }
 }

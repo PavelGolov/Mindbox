@@ -37,7 +37,6 @@ namespace Mindbox.Test.BLL
         {
             // Arrange
             var radiuses = new double[] { -1000, 0 };
-            IFigure circle = new Circle(0);
 
             //Assert
             foreach (var radius in radiuses)

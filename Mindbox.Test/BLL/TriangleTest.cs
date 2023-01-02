@@ -5,51 +5,53 @@ namespace Mindbox.Test.BLL
         private const double RightTriangleSquare = 6;
         private const double NotRightTriangleSquare = 84;
 
-        private ITriangle rightTriangle;
-        private ITriangle notRightTriangle;
+        private ITriangle[] _rightTriangles;
+        private ITriangle _notRightTriangle;
 
         [SetUp]
         public void Setup()
         {
-            rightTriangle = new Triangle(3, 4, 5);
-            notRightTriangle = new Triangle(13, 14, 15);
+            _rightTriangles = new Triangle[]
+            {
+            new Triangle(3, 4, 5),
+            new Triangle(5, 4, 3),
+            new Triangle(4, 5, 3),
+            };
+
+            _notRightTriangle = new Triangle(13, 14, 15);
         }
 
         [Test]
-        public void Square_RightTriangle_Success()
+        public void Square_RightTriangles_Success()
         {
-            // Act
-            var actualSquare = rightTriangle.Square();
-
             //Assert
-            Assert.AreEqual(RightTriangleSquare, actualSquare);
+            foreach (var triangle in _rightTriangles)
+                Assert.AreEqual(RightTriangleSquare, triangle.Square());
         }
 
         [Test]
         public void Square_NotRightTriangle_Success()
         {
             // Act
-            var actualSquare = notRightTriangle.Square();
+            var actualSquare = _notRightTriangle.Square();
 
             //Assert
             Assert.AreEqual(NotRightTriangleSquare, actualSquare);
         }
 
         [Test]
-        public void IsRight_RightTriangle_Success()
+        public void IsRight_RightTriangles_Success()
         {
-            // Act
-            var isRightTriangle = rightTriangle.IsRight();
-
             //Assert
-            Assert.True(isRightTriangle);
+            foreach (var triangle in _rightTriangles)
+                Assert.True(triangle.IsRight());
         }
 
         [Test]
         public void IsRight_NotRightTriangle_Failed()
         {
             // Act
-            var isRightTriangle = notRightTriangle.IsRight();
+            var isRightTriangle = _notRightTriangle.IsRight();
 
             //Assert
             Assert.False(isRightTriangle);
@@ -59,24 +61,22 @@ namespace Mindbox.Test.BLL
         public void IsValid_NotRightTriangle_Success()
         {
             // Act
-            var isValidTriangle = notRightTriangle.isValid();
+            var isValidTriangle = _notRightTriangle.isValid();
 
             //Assert
             Assert.True(isValidTriangle);
         }
 
         [Test]
-        public void IsValid_RightTriangle_Success()
+        public void IsValid_RightTriangles_Success()
         {
-            // Act
-            var isValidTriangle = rightTriangle.isValid();
-
             //Assert
-            Assert.True(isValidTriangle);
+            foreach (var triangle in _rightTriangles)
+                Assert.True(triangle.isValid());
         }
 
         [Test]
-        public void IsValid_NotPositiveSideLengths_Exception()
+        public void IsValid_NotPositiveSideLengths_Failed()
         {
             // Arrange
             var sides = new double[] { -1000, 0, 1000 };
@@ -94,7 +94,7 @@ namespace Mindbox.Test.BLL
         }
 
         [Test]
-        public void IsValid_NotExistTriangle_Exception()
+        public void IsValid_NotExistTriangle_Failed()
         {
             // Arrange
             IFigure triangle = new Triangle(1, 1, 10);
